@@ -209,3 +209,43 @@ public function generateToken()
     return $jwtToken;
 }
 ```
+
+### In-App Purchase Validation (New API) ###
+Apple has deprecated the `verifyReceipt` endpoint. Use the new App Store Server API for transaction validation:
+
+```php
+use AppleClient;
+use AppleService_AppStoreServer;
+use Cantie\AppStoreConnect\Validator\InAppPurchaseValidator;
+
+$client = new AppleClient();
+$client->setApiKey("PATH_TO_API_KEY");
+$client->setIssuerId($issuerId);
+$client->setKeyIdentifier($keyIdentifier);
+
+// Create App Store Server service for transaction validation
+$appStoreServer = new AppleService_AppStoreServer($client);
+$validator = new InAppPurchaseValidator($appStoreServer, 'com.yourapp.bundleid');
+
+// Validate a single transaction (replaces verifyReceipt)
+$transaction = $validator->validateTransaction($transactionId);
+if ($transaction && $validator->isTransactionValid($transaction)) {
+    echo "✅ Valid transaction for product: " . $transaction['productId'];
+}
+
+// Get transaction history for a customer
+$history = $validator->getTransactionHistory($originalTransactionId);
+foreach ($history['transactions'] as $transaction) {
+    if ($validator->isTransactionValid($transaction)) {
+        echo "Valid purchase: " . $transaction['productId'];
+    }
+}
+
+// Check subscription status
+$subscriptionInfo = $validator->getSubscriptionStatuses($originalTransactionId);
+if ($subscriptionInfo && $validator->isSubscriptionActive($subscriptionInfo['subscriptionStatuses'][0])) {
+    echo "✅ Active subscription";
+}
+```
+
+For complete documentation and server notifications setup, see [INAPP_PURCHASE_VALIDATION.md](INAPP_PURCHASE_VALIDATION.md).
