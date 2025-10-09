@@ -10,7 +10,8 @@ $classMap = [
     'Cantie\\AppStoreConnect\\Client' => 'AppleClient',
     'Cantie\\AppStoreConnect\\Service' => 'AppleService',
     'Cantie\\AppStoreConnect\\Services\\AppStore' => 'AppleService_AppStore',
-    'Cantie\\AppStoreConnect\\Services\\Upload' => 'AppleService_Upload'
+    'Cantie\\AppStoreConnect\\Services\\Upload' => 'AppleService_Upload',
+    'Cantie\\AppStoreConnect\\Services\\AppStoreServer' => 'AppleService_AppStoreServer'
 ];
 
 foreach ($classMap as $class => $alias) {
@@ -23,4 +24,5 @@ if (\false) {
     class AppleService extends \Cantie\AppStoreConnect\Service {}
     class AppleService_AppStore extends \Cantie\AppStoreConnect\Services\AppStore {}
     class AppleService_Upload extends \Cantie\AppStoreConnect\Services\Upload {}
+    class AppleService_AppStoreServer extends \Cantie\AppStoreConnect\Services\AppStoreServer {}
 }
